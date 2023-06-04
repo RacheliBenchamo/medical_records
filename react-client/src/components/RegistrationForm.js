@@ -1,6 +1,10 @@
 import React, { useState } from 'react';
-import { Form, Button, Alert } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import 'bootstrap/dist/js/bootstrap.bundle.min.js';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import 'bootstrap/dist/js/bootstrap.bundle.min.js';
+import { Form, Button, FormGroup, FormLabel, FormControl, FormText, FormCheck, Dropdown } from 'react-bootstrap';
+
 import axios from 'axios';
 
 const RegistrationForm = () => {
@@ -17,9 +21,6 @@ const RegistrationForm = () => {
         conditions: [],
         otherConditions: '',
     });
-
-    const [formErrors, setFormErrors] = useState({});
-    const [submitting, setSubmitting] = useState(false);
 
     const handleChange = (e) => {
         const { name, value, type, checked } = e.target;
@@ -40,133 +41,92 @@ const RegistrationForm = () => {
         setFormData((prevData) => ({ ...prevData, [name]: fieldValue }));
     };
 
-    const validateForm = () => {
-        const errors = {};
-
-        if (!formData.firstName) {
-            errors.firstName = 'First name is required';
-        }
-
-        if (!formData.lastName) {
-            errors.lastName = 'Last name is required';
-        }
-
-        if (!formData.dateOfBirth) {
-            errors.dateOfBirth = 'Date of birth is required';
-        }
-
-        if (!formData.address) {
-            errors.address = 'Address is required';
-        }
-
-        if (!formData.city) {
-            errors.city = 'City is required';
-        }
-
-        if (!formData.cellphone) {
-            errors.cellphone = 'Cellular phone is required';
-        }
-
-        setFormErrors(errors);
-
-        return Object.keys(errors).length === 0;
-    };
 
     const handleSubmit = (e) => {
         e.preventDefault();
 
-        const isValid = validateForm();
-
-        if (isValid) {
-            setSubmitting(true);
-
-            axios
-                .post('/api/register', formData)
-                .then((response) => {
-                    console.log(response.data);
-                    setFormData({
-                        firstName: '',
-                        lastName: '',
-                        dateOfBirth: '',
-                        address: '',
-                        city: '',
-                        zipCode: '',
-                        landline: '',
-                        cellphone: '',
-                        infectedBefore: false,
-                        conditions: [],
-                        otherConditions: '',
-                    });
-                    setFormErrors({});
-                    setSubmitting(false);
-                })
-                .catch((error) => {
-                    console.error(error);
-                    setSubmitting(false);
+        axios.post('/api/register', formData)
+            .then((response) => {
+                console.log(response.data);
+                setFormData({
+                    firstName: '',
+                    lastName: '',
+                    dateOfBirth: '',
+                    address: '',
+                    city: '',
+                    zipCode: '',
+                    landline: '',
+                    cellphone: '',
+                    infectedBefore: false,
+                    conditions: [],
+                    otherConditions: '',
                 });
-        }
+            })
+            .catch((error) => {
+                console.error(error);
+            });
     };
 
     return (
         <Form onSubmit={handleSubmit}>
-            {formErrors.firstName && (
-                <Alert variant="danger">{formErrors.firstName}</Alert>
-            )}
             <Form.Group controlId="firstName">
                 <Form.Label>First Name</Form.Label>
                 <Form.Control
+                    className="form-input"
                     type="text"
                     name="firstName"
+                    placeholder="First Name"
+                    maxLength={20}
+                    minLength={2}
+                    pattern="^\s*[a-zA-Z]+$"
                     value={formData.firstName}
                     onChange={handleChange}
                     required
                 />
             </Form.Group>
-            {formErrors.lastName && (
-                <Alert variant="danger">{formErrors.lastName}</Alert>
-            )}
             <Form.Group controlId="lastName">
                 <Form.Label>Last Name</Form.Label>
                 <Form.Control
+                    className="form-input"
                     type="text"
                     name="lastName"
                     value={formData.lastName}
-                    onChange={handleChange}
+                    placeholder="Last Name"
+                    maxLength={20}
+                    minLength={2}
+                    pattern="^\s*[a-zA-Z]+$"
                     required
+                    onChange={handleChange}
                 />
             </Form.Group>
-            {formErrors.dateOfBirth && (
-                <Alert variant="danger">{formErrors.dateOfBirth}</Alert>
-            )}
             <Form.Group controlId="dateOfBirth">
                 <Form.Label>Date of Birth</Form.Label>
                 <Form.Control
+                    className="form-input"
                     type="date"
                     name="dateOfBirth"
                     value={formData.dateOfBirth}
+                    placeholder="Date of Birth"
                     onChange={handleChange}
                     required
                 />
             </Form.Group>
-            {formErrors.address && (
-                <Alert variant="danger">{formErrors.address}</Alert>
-            )}
             <Form.Group controlId="address">
                 <Form.Label>Address</Form.Label>
                 <Form.Control
+                    className="form-input"
                     type="text"
                     name="address"
                     value={formData.address}
+                    placeholder="Address"
                     onChange={handleChange}
                     required
                 />
             </Form.Group>
-            {formErrors.city && (
-                <Alert variant="danger">{formErrors.city}</Alert>
-            )}
             <Form.Group controlId="city">
                 <Form.Label>City</Form.Label>
                 <Form.Control
+                    className="form-input"
                     as="select"
                     name="city"
                     value={formData.city}
@@ -181,36 +141,40 @@ const RegistrationForm = () => {
             <Form.Group controlId="zipCode">
                 <Form.Label>Zip Code</Form.Label>
                 <Form.Control
-                    type="text"
+                    className="form-input"
+                    type="zipCode"
                     name="zipCode"
                     value={formData.zipCode}
+                    placeholder="Zip Code"
                     onChange={handleChange}
                 />
             </Form.Group>
             <Form.Group controlId="landline">
                 <Form.Label>Landline</Form.Label>
                 <Form.Control
+                    className="form-input"
                     type="text"
                     name="landline"
                     value={formData.landline}
+                    placeholder="Landline"
                     onChange={handleChange}
                 />
             </Form.Group>
-            {formErrors.cellphone && (
-                <Alert variant="danger">{formErrors.cellphone}</Alert>
-            )}
             <Form.Group controlId="cellphone">
                 <Form.Label>Cellular Phone</Form.Label>
                 <Form.Control
+                    className="form-input"
                     type="text"
                     name="cellphone"
                     value={formData.cellphone}
+                    placeholder="Cellular Phone"
                     onChange={handleChange}
                     required
                 />
             </Form.Group>
             <Form.Group controlId="infectedBefore" className="mb-3 form-check">
                 <Form.Check
+                    className="form-input"
                     type="checkbox"
                     name="infectedBefore"
                     checked={formData.infectedBefore}
@@ -250,15 +214,15 @@ const RegistrationForm = () => {
             <Form.Group controlId="otherConditions">
                 <Form.Label>Other Conditions</Form.Label>
                 <Form.Control
+                    className="form-input"
                     as="textarea"
                     name="otherConditions"
                     value={formData.otherConditions}
+                    placeholder="Other Conditions"
                     onChange={handleChange}
                 />
             </Form.Group>
-            <Button variant="primary" type="submit" disabled={submitting}>
-                {submitting ? 'Submitting...' : 'Register'}
-            </Button>
+            <Button variant="primary" type="submit">Register</Button>
         </Form>
     );
 };

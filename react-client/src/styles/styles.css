@@ -1,13 +1,3 @@
-body {
-    margin: 0;
-    padding: 0;
-    height: 100%;
-    background-image: url("../../public/images/background2.png");
-    background-size: 100% 100%;
-    background-repeat: no-repeat;
-    background-attachment: fixed;
-}
-
 #root {
     display: flex;
     flex-direction: column;
