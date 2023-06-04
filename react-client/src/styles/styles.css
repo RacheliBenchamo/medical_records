@@ -1,0 +1,235 @@
+body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    background-image: url("../../public/images/background2.png");
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+}
+
+#root {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.header {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    position: relative;
+    height: 60vh; /* set the height of the header to be the same as the image */
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: auto; /* use auto margin for top to push container to the bottom */
+    margin-bottom: 2rem; /* add bottom margin to create space between image and buttons */
+    position: relative;
+    top: 0; /* position the container up by half the height of the image */
+}
+
+.container img {
+    padding-top: 2vh;
+    max-height: 50vh;
+    max-width: 110vh;
+    min-height: 50vh;
+    min-width: 110vh;
+    align-self: center; /* center the image horizontally */
+}
+.header-buttons {
+    display: flex;
+    margin-bottom: 1rem;
+    justify-content: center;
+    align-items: center;
+    font-size: max(1vw, 1vh);
+    gap: 1rem;
+    margin-top: auto;
+    transform: translateY(-50%);
+}
+
+.header-buttons .my-button {
+    background-color: #f5b213;
+    color: #000000;
+    font-weight: 900;
+    border-color: black;
+    border-width: 2px;
+    padding: 3vh 2vh;
+    height: 5vh;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s ease-in-out;
+    font-family: 'Cinzel Decorative', cursive;
+    font-size: 3.5vh;
+    line-height: 5vh;
+    white-space: nowrap;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center; /* center text horizontally within the button */
+}
+
+/* Media query for zoomed screens */
+@media screen and (min-resolution: 2dppx) and (max-width: 768px) {
+    .header-buttons .my-button {
+        font-size: 4vw; /* set a smaller font size for zoomed screens */
+        border-radius: 1.4vh;
+        border-width: 0.6vh;
+        padding: 3vh 2.5vh;
+        margin: 1rem;
+    }
+    .footer .btn{
+        /* make the buttons smaller for zoomed screens */
+        font-size: 1vw;
+    }
+    .footer .select .table-container{
+        /* make the select smaller for zoomed screens */
+        font-size: 1vw;
+    }
+}
+
+/* Media query for zoomed screens */
+@media screen and (min-resolution: 2dppx) and (max-height: 500px) {
+    .header-buttons .my-button {
+        font-size: 3.5vh; /* set a smaller font size for zoomed screens */
+    }
+}
+
+
+.footer {
+    padding-top: 10vh;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    background-color: black;
+    color: white;
+    text-align: center;
+    font-size: 3.5vh;
+    align-items: center;
+    background-color: rgba(40, 44, 52, 0.5);
+    overflow-y: scroll;
+    max-height: 45vh;
+    min-height: 45vh;
+    display: flex;
+    /* make the footer sticky to the bottom of the screen */
+    position: sticky;
+    z-index: 1;
+    /* make to footer content to begin at the top of the footer */
+    flex-direction: column;
+    justify-content: flex-start;
+}
+
+.table-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    overflow-y: scroll; /* change this to scroll */
+    padding: 1rem;
+}
+
+
+.footer .btn{
+    /* apply styles to all .btn and .select classes in the footer */
+    font-size: 1.8vw;
+    border-radius: 1.4vh;
+    border-width: 0.6vh;
+
+}
+
+.footer .select {
+    font-size: 1.6vw;
+    border-radius: 1.4vh;
+    border-width: 0.6vh;
+    width: 15vw;
+    margin: -7vh 1vh 1vh;
+}
+
+.my-button:hover {
+    background-color: #f5b213;
+    color: #FFFFFF;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transform: translateY(-2px);
+}
+
+.my-button:active {
+    background-color: #f5b213;
+    color: #FFFFFF;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+    transform: translateY(1px);
+}
+
+.massage {
+    color: greenyellow;
+}
+
+.font1 {
+    color: white;
+    text-shadow: 2px 2px #64c16b, -2px -2px #146b32, 2px -2px #146b32, -2px 2px #146b32;
+    -webkit-text-stroke: 1px #146b32;
+    font-size: max(2rem, 2vw);
+    padding: 10px 20px;
+    border: 2px solid #64c16b;
+    border-radius: 10px;
+}
+
+.font2 {
+    color: white;
+    text-shadow: 2px 2px #64c16b, -2px -2px #146b32, 2px -2px #146b32, -2px 2px #146b32;
+    -webkit-text-stroke: 1px #146b32;
+    font-size: max(2rem, 2vw);
+    padding: 10px 20px;
+    border-radius: 10px;
+    background-color: #95d973;
+}
+
+.font3 {
+    color: white;
+    text-shadow: 2px 2px #64c16b, -2px -2px #146b32, 2px -2px #146b32, -2px 2px #146b32;
+    -webkit-text-stroke: 1px #146b32;
+    font-size: max(2rem, 2vw);
+    border-radius: 10px;
+}
+
+.game-rules {
+    font-size: 1.3vw; /* Adjusted font size */
+    border-radius: 1.4vh;
+    border-width: 0.6vh;
+    text-align: center;
+    color: black;
+    max-height: 45vh; /* Set a maximum height for the container */
+    overflow-y: auto;
+    max-width: 90vh;
+    margin-top: 0.8rem;
+    padding-right: 1rem;
+}
+
+.game-rules p {
+    margin-bottom: 10px;
+}
+
+.game-rules b {
+    font-weight: bold;
+}
+
+.game-rules b {
+    font-style: italic;
+}
+
+.EndGameScreen {
+    /* make the EndGameScreen fill the entire footer */
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    padding: 1vw;
+
+}
+
+.EndGameScreen .form-control{
+    font-size: max(2rem, 2vw);
+}
