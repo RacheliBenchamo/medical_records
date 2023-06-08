@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
-import { Form, Button, FormGroup, FormLabel, FormControl, FormText, FormCheck, Dropdown } from 'react-bootstrap';
+import {Form, Button, FormGroup, FormLabel, FormControl, FormText, FormCheck, Dropdown, Alert} from 'react-bootstrap';
+import "../styles/styles.css";
 
 import axios from 'axios';
 
@@ -21,18 +22,42 @@ const RegistrationForm = () => {
         conditions: [],
         otherConditions: '',
     });
+    const [cityOptions, setCityOptions] = useState([]);
+    const [error, setError] = useState(null);
+    const [registrationComplete, setRegistrationComplete] = useState(false); // New state variable
+
+    useEffect(() => {
+        fetchCityData();
+    }, []);
+
+    const fetchCityData = () => {
+        axios.get(`//api.geonames.org/searchJSON?country=IL&maxRows=100&style=FULL&username=ksuhiyp`)
+            .then(response => {
+                const cityData = response.data.geonames.map(city => city.name);
+                cityData.sort();
+                setCityOptions(cityData);
+            })
+            .catch(error => {
+                console.log(error);
+            });
+    };
+
 
     const handleChange = (e) => {
         const { name, value, type, checked } = e.target;
         let fieldValue;
 
         if (type === 'checkbox') {
-            const { conditions } = formData;
+            if (name === 'infectedBefore') {
+                fieldValue = checked;
+            } else if (name === 'conditions') {
+                const { conditions } = formData;
 
-            if (checked) {
-                fieldValue = [...conditions, value];
-            } else {
-                fieldValue = conditions.filter((condition) => condition !== value);
+                if (checked) {
+                    fieldValue = [...conditions, value];
+                } else {
+                    fieldValue = conditions.filter((condition) => condition !== value);
+                }
             }
         } else {
             fieldValue = value;
@@ -47,7 +72,7 @@ const RegistrationForm = () => {
 
         axios.post('/api/register', formData)
             .then((response) => {
-                console.log(response.data);
+                setRegistrationComplete(true);
                 setFormData({
                     firstName: '',
                     lastName: '',
@@ -62,11 +87,26 @@ const RegistrationForm = () => {
                     otherConditions: '',
                 });
             })
-            .catch((error) => {
-                console.error(error);
+            .catch(error => {
+                if(error.response.status === 404) {
+                    setError([error.response.data.error]);
+                }
+                else if(error.response.status === 500) {
+                    setError([error.response.statusText]);
+                }
+                else
+                    setError(error.response.data);
             });
     };
 
+    if (registrationComplete) {
+        return (
+            <div className="registration-complete">
+                <h3>Thank you for registering!</h3>
+                <p>Your details have been successfully submitted.</p>
+            </div>
+        );
+    }
     return (
         <Form onSubmit={handleSubmit}>
             <Form.Group controlId="firstName">
@@ -107,6 +147,7 @@ const RegistrationForm = () => {
                     name="dateOfBirth"
                     value={formData.dateOfBirth}
                     placeholder="Date of Birth"
+                    max={new Date().toISOString().split('T')[0]} // Set the max attribute to the current date
                     onChange={handleChange}
                     required
                 />
@@ -133,9 +174,12 @@ const RegistrationForm = () => {
                     onChange={handleChange}
                     required
                 >
-                    <option value="">Select City</option>
-                    <option value="city1">City 1</option>
-                    <option value="city2">City 2</option>
+                <option value="">Select City</option>
+                {cityOptions.map((city, index) => (
+                    <option key={index} value={city}>
+                        {city}
+                    </option>
+                ))}
                 </Form.Control>
             </Form.Group>
             <Form.Group controlId="zipCode">
@@ -223,6 +267,21 @@ const RegistrationForm = () => {
                 />
             </Form.Group>
             <Button variant="primary" type="submit">Register</Button>
+            <div className="error">
+                {error && (
+                    <Alert variant="danger" className="mt-4">
+                        {Array.isArray(error) ? (
+                            <ul>
+                                {error.map((errorMsg, index) => (
+                                    <li key={index}>{errorMsg}</li>
+                                ))}
+                            </ul>
+                        ) : (
+                            <p>{error}</p>
+                        )}
+                    </Alert>
+                )}
+            </div>
         </Form>
     );
 };

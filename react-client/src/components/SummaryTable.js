@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { Table, Form } from 'react-bootstrap';
+import {Table, Form, Button, FormGroup} from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import "../styles/styles.css";
+
 import axios from 'axios';
 
 const SummaryTable = () => {
@@ -9,20 +11,32 @@ const SummaryTable = () => {
     const [filteredData, setFilteredData] = useState([]);
     const [dateRange, setDateRange] = useState({ startDate: '', endDate: '' });
     const [searchCity, setSearchCity] = useState('');
+    const [error, setError] = useState(null);
 
     // Fetch registration data from the server
     useEffect(() => {
         axios
-            .get('/api/registrations')
+            .get('/api/medical-data')
             .then((response) => {
-                // Update registrationData state with fetched data
                 setRegistrationData(response.data);
             })
-            .catch((error) => {
-                // Handle error while fetching data
-                console.error(error);
+            .catch(error => {
+                console.log(error);
+                if(error.response.status === 404) {
+                    setError(error.response.data.error);
+                }
+                else if(error.response.status === 500) {
+                    setError(error.response.statusText);
+                }
+                else
+                    setError(error.response.data);
             });
-    }, []); // Empty dependency array ensures this effect runs only once on component mount
+    }, []);
+
+    useEffect(() => {
+        console.log(filteredData);
+    }, [filteredData]);
+
 
     // Filter registration data based on date range and city
     useEffect(() => {
@@ -32,10 +46,14 @@ const SummaryTable = () => {
             const endDate = new Date(dateRange.endDate);
             const isWithinDateRange = dateOfBirth >= startDate && dateOfBirth <= endDate;
             const matchesCity = registration.city.toLowerCase().includes(searchCity.toLowerCase());
-            return isWithinDateRange && matchesCity;
+            return (
+                (!dateRange.startDate || !dateRange.endDate || isWithinDateRange) &&
+                (!searchCity || matchesCity)
+            );
         });
         setFilteredData(filtered);
     }, [dateRange, searchCity, registrationData]);
+
 
     // Handle date range change
     const handleDateRangeChange = (e) => {
@@ -46,6 +64,13 @@ const SummaryTable = () => {
     // Handle city search change
     const handleCitySearchChange = (e) => {
         setSearchCity(e.target.value);
+    };
+
+    // Clear filters and show all data
+    const clearFilters = () => {
+        setDateRange({ startDate: '', endDate: '' });
+        setSearchCity('');
+        setFilteredData(registrationData);
     };
 
     return (
@@ -80,26 +105,56 @@ const SummaryTable = () => {
                     />
                 </Form.Group>
             </Form>
-            <Table striped bordered responsive>
-                <thead>
-                <tr>
-                    <th>First Name</th>
-                    <th>Last Name</th>
-                    <th>Date of Birth</th>
-                    <th>City</th>
-                </tr>
-                </thead>
-                <tbody>
-                {filteredData.map((registration) => (
-                    <tr key={registration.id}>
-                        <td>{registration.firstName}</td>
-                        <td>{registration.lastName}</td>
-                        <td>{registration.dateOfBirth}</td>
-                        <td>{registration.city}</td>
-                    </tr>
-                ))}
-                </tbody>
-            </Table>
+            <div className="mb-3">
+                <Button variant="secondary" onClick={clearFilters}>
+                    Clear Filters
+                </Button>
+            </div>
+            <div>
+                {filteredData.length > 0 ? (
+                    <Table striped bordered responsive>
+                        <thead>
+                        <tr>
+                            <th>First Name</th>
+                            <th>Last Name</th>
+                            <th>Date of Birth</th>
+                            <th>City</th>
+                            <th>COVID-19 Infection</th>
+                            <th>Previous Conditions</th>
+                            <th>Other Conditions</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {filteredData.map((registration) => (
+                            <tr key={registration.id}>
+                                <td>{registration.firstName}</td>
+                                <td>{registration.lastName}</td>
+                                <td>{registration.dateOfBirth}</td>
+                                <td>{registration.city}</td>
+                                <td>{registration.infectedBefore ? '✓' : '✕'}</td>
+                                <td>
+                                    {registration.conditions && registration.conditions.length > 0
+                                        ? registration.conditions.join(', ')
+                                        : '-'}
+                                </td>
+                                <td>{registration.otherConditions !== ''
+                                    ? registration.otherConditions
+                                    : '-'}
+                                </td>
+                            </tr>
+                        ))}
+                        </tbody>
+                    </Table>
+                ) : (
+                    <div className="alert alert-info" role="alert">
+                        No data found
+                    </div>
+                )}
+            </div>
+
+            {error && (
+                <div className="alert alert-danger" role="alert">{error} </div>
+            )}
         </div>
     );
 };

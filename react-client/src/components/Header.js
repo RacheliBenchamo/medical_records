@@ -1,14 +1,15 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import "../styles/styles.css";
 
 function Header() {
     return (
         <header className="navbar navbar-expand-lg navbar-light bg-light">
             <div className="container">
-                <div className="logo">
-                    <span>Medical Records</span>
-                </div>
+                <Link className="navbar-brand" to="/">
+                    <img src="https://res.cloudinary.com/db8eidwqd/image/upload/c_scale,w_350/v1585697185/Hygiene%20Hub/virus-white_q3sgxv.jpg" alt="Logo" />
+                </Link>
                 <button
                     className="navbar-toggler"
                     type="button"
