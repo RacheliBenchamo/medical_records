@@ -1,9 +1,22 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
-import {Form, Button, FormGroup, FormLabel, FormControl, FormText, FormCheck, Dropdown, Alert} from 'react-bootstrap';
+import {
+    Form,
+    Button,
+    FormGroup,
+    FormLabel,
+    FormControl,
+    FormText,
+    FormCheck,
+    Dropdown,
+    Alert,
+    Container,
+    Col,
+    Row
+} from 'react-bootstrap';
 import "../styles/styles.css";
 
 import axios from 'axios';
@@ -88,10 +101,10 @@ const RegistrationForm = () => {
                 });
             })
             .catch(error => {
-                if(error.response.status === 404) {
+                if (error.response.status === 404) {
                     setError([error.response.data.error]);
                 }
-                else if(error.response.status === 500) {
+                else if (error.response.status === 500) {
                     setError([error.response.statusText]);
                 }
                 else
@@ -101,188 +114,196 @@ const RegistrationForm = () => {
 
     if (registrationComplete) {
         return (
-            <div className="registration-complete">
-                <h3>Thank you for registering!</h3>
-                <p>Your details have been successfully submitted.</p>
-            </div>
+            <Container>
+                <Row className="justify-content-center">
+                    <Col sm={12} md={8}>
+                        <div className="registration-complete">
+                            <h3>Thank you for registering!</h3>
+                            <p>Your details have been successfully submitted.</p>
+                        </div>
+                    </Col>
+                </Row>
+            </Container>
         );
     }
     return (
-        <Form onSubmit={handleSubmit}>
-            <Form.Group controlId="firstName">
-                <Form.Label>First Name</Form.Label>
-                <Form.Control
-                    className="form-input"
-                    type="text"
-                    name="firstName"
-                    placeholder="First Name"
-                    maxLength={20}
-                    minLength={2}
-                    pattern="^\s*[a-zA-Z]+$"
-                    value={formData.firstName}
-                    onChange={handleChange}
-                    required
-                />
-            </Form.Group>
-            <Form.Group controlId="lastName">
-                <Form.Label>Last Name</Form.Label>
-                <Form.Control
-                    className="form-input"
-                    type="text"
-                    name="lastName"
-                    value={formData.lastName}
-                    placeholder="Last Name"
-                    maxLength={20}
-                    minLength={2}
-                    pattern="^\s*[a-zA-Z]+$"
-                    required
-                    onChange={handleChange}
-                />
-            </Form.Group>
-            <Form.Group controlId="dateOfBirth">
-                <Form.Label>Date of Birth</Form.Label>
-                <Form.Control
-                    className="form-input"
-                    type="date"
-                    name="dateOfBirth"
-                    value={formData.dateOfBirth}
-                    placeholder="Date of Birth"
-                    max={new Date().toISOString().split('T')[0]} // Set the max attribute to the current date
-                    onChange={handleChange}
-                    required
-                />
-            </Form.Group>
-            <Form.Group controlId="address">
-                <Form.Label>Address</Form.Label>
-                <Form.Control
-                    className="form-input"
-                    type="text"
-                    name="address"
-                    value={formData.address}
-                    placeholder="Address"
-                    onChange={handleChange}
-                    required
-                />
-            </Form.Group>
-            <Form.Group controlId="city">
-                <Form.Label>City</Form.Label>
-                <Form.Control
-                    className="form-input"
-                    as="select"
-                    name="city"
-                    value={formData.city}
-                    onChange={handleChange}
-                    required
-                >
-                <option value="">Select City</option>
-                {cityOptions.map((city, index) => (
-                    <option key={index} value={city}>
-                        {city}
-                    </option>
-                ))}
-                </Form.Control>
-            </Form.Group>
-            <Form.Group controlId="zipCode">
-                <Form.Label>Zip Code</Form.Label>
-                <Form.Control
-                    className="form-input"
-                    type="zipCode"
-                    name="zipCode"
-                    value={formData.zipCode}
-                    placeholder="Zip Code"
-                    onChange={handleChange}
-                />
-            </Form.Group>
-            <Form.Group controlId="landline">
-                <Form.Label>Landline</Form.Label>
-                <Form.Control
-                    className="form-input"
-                    type="text"
-                    name="landline"
-                    value={formData.landline}
-                    placeholder="Landline"
-                    onChange={handleChange}
-                />
-            </Form.Group>
-            <Form.Group controlId="cellphone">
-                <Form.Label>Cellular Phone</Form.Label>
-                <Form.Control
-                    className="form-input"
-                    type="text"
-                    name="cellphone"
-                    value={formData.cellphone}
-                    placeholder="Cellular Phone"
-                    onChange={handleChange}
-                    required
-                />
-            </Form.Group>
-            <Form.Group controlId="infectedBefore" className="mb-3 form-check">
-                <Form.Check
-                    className="form-input"
-                    type="checkbox"
-                    name="infectedBefore"
-                    checked={formData.infectedBefore}
-                    onChange={handleChange}
-                    label="Have you been infected by COVID-19 before?"
-                />
-            </Form.Group>
-            <Form.Group controlId="conditions" className="mb-3">
-                <Form.Label>Previous Conditions</Form.Label>
-                <div>
-                    <Form.Check
-                        type="checkbox"
-                        name="conditions"
-                        value="diabetes"
-                        checked={formData.conditions.includes('diabetes')}
-                        onChange={handleChange}
-                        label="Diabetes"
-                    />
-                    <Form.Check
-                        type="checkbox"
-                        name="conditions"
-                        value="cardiovascular"
-                        checked={formData.conditions.includes('cardiovascular')}
-                        onChange={handleChange}
-                        label="Cardiovascular Problems"
-                    />
-                    <Form.Check
-                        type="checkbox"
-                        name="conditions"
-                        value="allergies"
-                        checked={formData.conditions.includes('allergies')}
-                        onChange={handleChange}
-                        label="Allergies"
-                    />
-                </div>
-            </Form.Group>
-            <Form.Group controlId="otherConditions">
-                <Form.Label>Other Conditions</Form.Label>
-                <Form.Control
-                    className="form-input"
-                    as="textarea"
-                    name="otherConditions"
-                    value={formData.otherConditions}
-                    placeholder="Other Conditions"
-                    onChange={handleChange}
-                />
-            </Form.Group>
-            <Button variant="primary" type="submit">Register</Button>
-            <div className="error">
-                {error && (
-                    <Alert variant="danger" className="mt-4">
-                        {Array.isArray(error) ? (
-                            <ul>
-                                {error.map((errorMsg, index) => (
-                                    <li key={index}>{errorMsg}</li>
+        <Container>
+            <Row className="justify-content-center">
+                <Col sm={12} md={8}>
+                    <Form onSubmit={handleSubmit}>
+                        <FormGroup controlId="formFirstName">
+                            <FormLabel>First Name</FormLabel>
+                            <FormControl
+                                type="text"
+                                name="firstName"
+                                value={formData.firstName}
+                                onChange={handleChange}
+                                required
+                            />
+                        </FormGroup>
+
+                        <FormGroup controlId="formLastName">
+                            <FormLabel>Last Name</FormLabel>
+                            <FormControl
+                                type="text"
+                                name="lastName"
+                                value={formData.lastName}
+                                onChange={handleChange}
+                                required
+                            />
+                        </FormGroup>
+
+                        <FormGroup controlId="formDateOfBirth">
+                            <FormLabel>Date of Birth</FormLabel>
+                            <FormControl
+                                type="date"
+                                name="dateOfBirth"
+                                value={formData.dateOfBirth}
+                                onChange={handleChange}
+                                required
+                            />
+                        </FormGroup>
+
+                        <FormGroup controlId="formAddress">
+                            <FormLabel>Address</FormLabel>
+                            <FormControl
+                                type="text"
+                                name="address"
+                                value={formData.address}
+                                onChange={handleChange}
+                                required
+                            />
+                        </FormGroup>
+
+                        <FormGroup controlId="formCity">
+                            <FormLabel>City</FormLabel>
+                            <FormControl
+                                as="select"
+                                name="city"
+                                value={formData.city}
+                                onChange={handleChange}
+                                required
+                            >
+                                <option value="" disabled>Select a city</option>
+                                {cityOptions.map((city) => (
+                                    <option key={city} value={city}>{city}</option>
                                 ))}
-                            </ul>
-                        ) : (
-                            <p>{error}</p>
+                            </FormControl>
+                        </FormGroup>
+
+                        <FormGroup controlId="formZipCode">
+                            <FormLabel>Zip Code</FormLabel>
+                            <FormControl
+                                type="text"
+                                name="zipCode"
+                                value={formData.zipCode}
+                                onChange={handleChange}
+                                required
+                            />
+                        </FormGroup>
+
+                        <FormGroup controlId="formLandline">
+                            <FormLabel>Landline</FormLabel>
+                            <FormControl
+                                type="tel"
+                                name="landline"
+                                value={formData.landline}
+                                onChange={handleChange}
+                            />
+                        </FormGroup>
+
+                        <FormGroup controlId="formCellphone">
+                            <FormLabel>Cellphone</FormLabel>
+                            <FormControl
+                                type="tel"
+                                name="cellphone"
+                                value={formData.cellphone}
+                                onChange={handleChange}
+                                required
+                            />
+                        </FormGroup>
+
+                        <FormGroup>
+                            <FormCheck
+                                type="checkbox"
+                                name="infectedBefore"
+                                id="infectedBefore"
+                                checked={formData.infectedBefore}
+                                onChange={handleChange}
+                                label={<span className="bold-label">Have you been infected by COVID-19 before?</span>} // Apply the bold-label class to the label
+                            />
+                        </FormGroup>
+
+                        <FormGroup controlId="formConditions">
+                            <FormLabel>Pre-existing Conditions</FormLabel>
+                            <div>
+                                <FormCheck
+                                    type="checkbox"
+                                    name="conditions"
+                                    id="diabetes"
+                                    value="diabetes"
+                                    checked={formData.conditions.includes('diabetes')}
+                                    onChange={handleChange}
+                                    label="Diabetes"
+                                />
+                            </div>
+                            <div>
+                                <FormCheck
+                                    type="checkbox"
+                                    name="conditions"
+                                    id="hypertension"
+                                    value="hypertension"
+                                    checked={formData.conditions.includes('hypertension')}
+                                    onChange={handleChange}
+                                    label="Hypertension"
+                                />
+                            </div>
+                            <div>
+                                <FormCheck
+                                    type="checkbox"
+                                    name="conditions"
+                                    id="heartDisease"
+                                    value="heartDisease"
+                                    checked={formData.conditions.includes('heartDisease')}
+                                    onChange={handleChange}
+                                    label="Heart Disease"
+                                />
+                            </div>
+                        </FormGroup>
+
+                        <FormGroup controlId="formOtherConditions">
+                            <FormLabel>Other Conditions</FormLabel>
+                            <FormControl
+                                as="textarea"
+                                rows={3}
+                                name="otherConditions"
+                                value={formData.otherConditions}
+                                onChange={handleChange}
+                            />
+                            <FormText className="text-muted">Please separate multiple conditions with commas.</FormText>
+                        </FormGroup>
+
+                        {error && (
+                            <Alert variant="danger">
+                                {Array.isArray(error) ? (
+                                    <ul>
+                                        {error.map((errorMessage, index) => (
+                                            <li key={index}>{errorMessage}</li>
+                                        ))}
+                                    </ul>
+                                ) : (
+                                    <p>{error}</p>
+                                )}
+                            </Alert>
                         )}
-                    </Alert>
-                )}
-            </div>
-        </Form>
+
+                        <Button variant="primary" type="submit">
+                            Register
+                        </Button>
+                    </Form>
+                </Col>
+            </Row>
+        </Container>
     );
 };
 

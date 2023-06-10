@@ -1,35 +1,30 @@
 import React, { useState, useEffect } from 'react';
-import {Table, Form, Button, FormGroup} from 'react-bootstrap';
+import { Table, Form, Button } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import "../styles/styles.css";
+import '../styles/styles.css';
 
 import axios from 'axios';
 
 const SummaryTable = () => {
-    // Initialize state for the registration data
     const [registrationData, setRegistrationData] = useState([]);
     const [filteredData, setFilteredData] = useState([]);
     const [dateRange, setDateRange] = useState({ startDate: '', endDate: '' });
     const [searchCity, setSearchCity] = useState('');
     const [error, setError] = useState(null);
 
-    // Fetch registration data from the server
     useEffect(() => {
         axios
             .get('/api/medical-data')
             .then((response) => {
                 setRegistrationData(response.data);
             })
-            .catch(error => {
+            .catch((error) => {
                 console.log(error);
-                if(error.response.status === 404) {
+                if (error.response.status === 404) {
                     setError(error.response.data.error);
-                }
-                else if(error.response.status === 500) {
+                } else if (error.response.status === 500) {
                     setError(error.response.statusText);
-                }
-                else
-                    setError(error.response.data);
+                } else setError(error.response.data);
             });
     }, []);
 
@@ -37,8 +32,6 @@ const SummaryTable = () => {
         console.log(filteredData);
     }, [filteredData]);
 
-
-    // Filter registration data based on date range and city
     useEffect(() => {
         const filtered = registrationData.filter((registration) => {
             const dateOfBirth = new Date(registration.dateOfBirth);
@@ -54,19 +47,15 @@ const SummaryTable = () => {
         setFilteredData(filtered);
     }, [dateRange, searchCity, registrationData]);
 
-
-    // Handle date range change
     const handleDateRangeChange = (e) => {
         const { name, value } = e.target;
         setDateRange((prevDateRange) => ({ ...prevDateRange, [name]: value }));
     };
 
-    // Handle city search change
     const handleCitySearchChange = (e) => {
         setSearchCity(e.target.value);
     };
 
-    // Clear filters and show all data
     const clearFilters = () => {
         setDateRange({ startDate: '', endDate: '' });
         setSearchCity('');
@@ -74,7 +63,7 @@ const SummaryTable = () => {
     };
 
     return (
-        <div>
+        <div className="container">
             <h2>Registration Summary</h2>
             <Form>
                 <Form.Group className="mb-3" controlId="dateRange">
@@ -137,9 +126,8 @@ const SummaryTable = () => {
                                         ? registration.conditions.join(', ')
                                         : '-'}
                                 </td>
-                                <td>{registration.otherConditions !== ''
-                                    ? registration.otherConditions
-                                    : '-'}
+                                <td>
+                                    {registration.otherConditions !== '' ? registration.otherConditions : '-'}
                                 </td>
                             </tr>
                         ))}
@@ -152,9 +140,7 @@ const SummaryTable = () => {
                 )}
             </div>
 
-            {error && (
-                <div className="alert alert-danger" role="alert">{error} </div>
-            )}
+            {error && <div className="alert alert-danger" role="alert">{error} </div>}
         </div>
     );
 };
