@@ -9,7 +9,7 @@ function Header() {
             <div className="container">
                 <div className="logo">
                     <img src="https://res.cloudinary.com/db8eidwqd/image/upload/c_scale,w_350/v1585697185/Hygiene%20Hub/virus-white_q3sgxv.jpg" alt="Logo" />
-                    <span>Hygiene Hub</span>
+                    <span>Immunization Hub</span>
                 </div>
                 <nav className="navbar navbar-expand-lg navbar-light bg-light">
                     <div className="collapse navbar-collapse" id="navbarNav">
