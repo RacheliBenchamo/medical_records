@@ -25,10 +25,8 @@ public class MainController {
 
     @PostMapping("/register")
     public ResponseEntity<?> addPurchase(@Valid @RequestBody MedicalData medicalData , BindingResult bindingResult) {
-        System.out.println("Register\n");
         if (bindingResult.hasErrors())
         {
-            System.out.println("Error\n");
             List<String> errors = bindingResult.getAllErrors().stream()
                     .map(ObjectError::getDefaultMessage)
                     .collect(Collectors.toList());

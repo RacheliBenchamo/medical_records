@@ -19,7 +19,6 @@ const SummaryTable = () => {
                 setRegistrationData(response.data);
             })
             .catch((error) => {
-                console.log(error);
                 if (error.response.status === 404) {
                     setError(error.response.data.error);
                 } else if (error.response.status === 500) {
@@ -29,7 +28,6 @@ const SummaryTable = () => {
     }, []);
 
     useEffect(() => {
-        console.log(filteredData);
     }, [filteredData]);
 
     useEffect(() => {

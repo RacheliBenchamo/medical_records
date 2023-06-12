@@ -3,6 +3,8 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
+import "../styles/styles.css";
+import axios from 'axios';
 import {
     Form,
     Button,
@@ -17,9 +19,7 @@ import {
     Col,
     Row
 } from 'react-bootstrap';
-import "../styles/styles.css";
 
-import axios from 'axios';
 
 const RegistrationForm = () => {
     const [formData, setFormData] = useState({
@@ -37,21 +37,29 @@ const RegistrationForm = () => {
     });
     const [cityOptions, setCityOptions] = useState([]);
     const [error, setError] = useState(null);
+    const [cityError, setCityError] = useState(null);
     const [registrationComplete, setRegistrationComplete] = useState(false); // New state variable
+    const country = "IL";
 
     useEffect(() => {
         fetchCityData();
     }, []);
 
     const fetchCityData = () => {
-        axios.get(`//api.geonames.org/searchJSON?country=IL&maxRows=100&style=FULL&username=ksuhiyp`)
+        axios.get(`http://api.geonames.org/searchJSON?country=${country}&maxRows=100&style=FULL&username=ksuhiyp`)
             .then(response => {
                 const cityData = response.data.geonames.map(city => city.name);
                 cityData.sort();
                 setCityOptions(cityData);
             })
             .catch(error => {
-                console.log(error);
+                if (error.response && error.response.status === 404) {
+                    setCityError(error.response.data.error);
+                } else if (error.response && error.response.status === 500) {
+                    setCityError(error.response.statusText);
+                } else {
+                    setCityError("An error occurred while fetching city data.");
+                }
             });
     };
 
@@ -141,7 +149,6 @@ const RegistrationForm = () => {
                                 required
                             />
                         </FormGroup>
-
                         <FormGroup controlId="formLastName">
                             <FormLabel>Last Name</FormLabel>
                             <FormControl
@@ -152,7 +159,6 @@ const RegistrationForm = () => {
                                 required
                             />
                         </FormGroup>
-
                         <FormGroup controlId="formDateOfBirth">
                             <FormLabel>Date of Birth</FormLabel>
                             <FormControl
@@ -163,7 +169,6 @@ const RegistrationForm = () => {
                                 required
                             />
                         </FormGroup>
-
                         <FormGroup controlId="formAddress">
                             <FormLabel>Address</FormLabel>
                             <FormControl
@@ -174,7 +179,6 @@ const RegistrationForm = () => {
                                 required
                             />
                         </FormGroup>
-
                         <FormGroup controlId="formCity">
                             <FormLabel>City</FormLabel>
                             <FormControl
@@ -185,12 +189,15 @@ const RegistrationForm = () => {
                                 required
                             >
                                 <option value="" disabled>Select a city</option>
-                                {cityOptions.map((city) => (
-                                    <option key={city} value={city}>{city}</option>
+                                {cityOptions.map((city, index) => (
+                                    <option key={`${city}-${index}`} value={city}>{city}</option>
                                 ))}
                             </FormControl>
                         </FormGroup>
 
+                        <div>
+                            {cityError && <Alert variant="danger">{cityError}</Alert>}
+                        </div>
                         <FormGroup controlId="formZipCode">
                             <FormLabel>Zip Code</FormLabel>
                             <FormControl
@@ -198,10 +205,9 @@ const RegistrationForm = () => {
                                 name="zipCode"
                                 value={formData.zipCode}
                                 onChange={handleChange}
-                                required
+
                             />
                         </FormGroup>
-
                         <FormGroup controlId="formLandline">
                             <FormLabel>Landline</FormLabel>
                             <FormControl
@@ -211,7 +217,6 @@ const RegistrationForm = () => {
                                 onChange={handleChange}
                             />
                         </FormGroup>
-
                         <FormGroup controlId="formCellphone">
                             <FormLabel>Cellphone</FormLabel>
                             <FormControl
@@ -222,7 +227,6 @@ const RegistrationForm = () => {
                                 required
                             />
                         </FormGroup>
-
                         <FormGroup>
                             <FormCheck
                                 type="checkbox"
@@ -233,7 +237,6 @@ const RegistrationForm = () => {
                                 label={<span className="bold-label">Have you been infected by COVID-19 before?</span>} // Apply the bold-label class to the label
                             />
                         </FormGroup>
-
                         <FormGroup controlId="formConditions">
                             <FormLabel>Pre-existing Conditions</FormLabel>
                             <div>
@@ -270,7 +273,6 @@ const RegistrationForm = () => {
                                 />
                             </div>
                         </FormGroup>
-
                         <FormGroup controlId="formOtherConditions">
                             <FormLabel>Other Conditions</FormLabel>
                             <FormControl
@@ -282,7 +284,6 @@ const RegistrationForm = () => {
                             />
                             <FormText className="text-muted">Please separate multiple conditions with commas.</FormText>
                         </FormGroup>
-
                         {error && (
                             <Alert variant="danger">
                                 {Array.isArray(error) ? (
@@ -296,7 +297,6 @@ const RegistrationForm = () => {
                                 )}
                             </Alert>
                         )}
-
                         <Button variant="primary" type="submit">
                             Register
                         </Button>
