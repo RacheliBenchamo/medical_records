@@ -188,7 +188,6 @@ body {
 .header {
     display: flex;
     align-items: center;
-    justify-content: space-between;
     padding: 10px 20px;
     background-color: #f8f9fa;
     color: #333;
@@ -200,36 +199,29 @@ body {
     width: 100%;
 }
 
-.header .logo {
+.header .container {
     display: flex;
+    justify-content: space-between;
     align-items: center;
-    margin-right: 20px;
+    max-width: 100%;
+    margin: 0;
+    padding: 0 20px;
 }
 
-.header .logo img {
-    width: 50px;
-    height: 50px;
-    margin-right: 10px;
-}
-
-.header .logo span {
-    font-weight: bold;
-    font-size: 24px;
+.header .navbar-nav {
+    margin-left: auto;
 }
 
 .header .navbar-nav .nav-link {
-    font-size: 18px;
-    margin-right: 15px;
-    color: #000;
-    text-decoration: none;
+    color: #333;
+    margin-right: 10px;
 }
 
-.header .navbar-nav .nav-link:hover {
-    color: #555;
+.header .navbar-nav .nav-link:last-child {
+    margin-right: 0;
 }
 
 body {
-    margin-top: 80px; /* Adjust this value to provide enough spacing below the header */
+    margin-top: 80px;
+    /* Adjust this value to provide enough spacing below the header */
 }
-
-
