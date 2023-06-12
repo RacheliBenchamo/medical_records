@@ -62,7 +62,7 @@ const SummaryTable = () => {
 
     return (
         <div className="container">
-            <h2>Registration Summary</h2>
+            <h2>Information Center</h2>
             <Form>
                 <Form.Group className="mb-3" controlId="dateRange">
                     <Form.Label>Date of Birth Range</Form.Label>
