@@ -221,3 +221,31 @@ body {
 .header .navbar-nav .nav-link:last-child {
     margin-right: 0;
 }
+
+.container.no-page-container {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: rgba(255, 255, 255, 0.8);
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    max-width: 800px;
+    text-align: center;
+}
+
+.container.no-page-container .button {
+    display: inline-block;
+    padding: 10px 20px;
+    border-radius: 5px;
+    background-color: #f8f9fa;
+    color: #333;
+    text-decoration: none;
+    transition: background-color 0.3s;
+}
+
+.container.no-page-container .button:hover {
+    background-color: #da2828;
+    color: #fff;
+}
