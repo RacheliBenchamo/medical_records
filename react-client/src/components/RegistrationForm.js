@@ -38,7 +38,7 @@ const RegistrationForm = () => {
     const [cityOptions, setCityOptions] = useState([]);
     const [error, setError] = useState(null);
     const [cityError, setCityError] = useState(null);
-    const [registrationComplete, setRegistrationComplete] = useState(false); // New state variable
+    const [registrationComplete, setRegistrationComplete] = useState(false);
     const country = "IL";
 
     useEffect(() => {

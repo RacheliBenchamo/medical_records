@@ -100,6 +100,9 @@ On starting the application, the React client fetches city data from the Geoname
 
 - The application's session data is stored in the database.
 
+- The country which the application fetches city data from can be changed in `client/src/components/RegistrationForm.js`.
+   replace country variable with the desired country code.
+
 ## Author
 
 - Racheli Benchamo: Email: racheli20202@gmail.com
